@@ -12,11 +12,8 @@ load_dotenv() #  initilie dot env
 
 
 # Model Initialization
-llm = ChatOpenAI(
-    model=os.getenv("OPENROUTER_MODEL",temperature=0)
-    
-    
-)
+llm = ChatOpenAI(model="gpt-4o-mini", 
+api_key=os.getenv("OPEN_ROUTER_API_KEY"), base_url="https://openrouter.ai/api/v1", temperature=0)
 
 
 
