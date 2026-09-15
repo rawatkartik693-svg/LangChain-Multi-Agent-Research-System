@@ -1,6 +1,7 @@
 import streamlit as st
 import time
-from src.agents.agents import build_search_agent, build_reader_agent, writer_chain, critic_chain
+import hmac
+import os
 
 # ── Page config ──────────────────────────────────────────────────────────────
 st.set_page_config(
@@ -9,6 +10,31 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="collapsed",
 )
+
+if "authenticated" not in st.session_state:
+    st.session_state.authenticated = False
+
+app_password = os.getenv("APP_PASSWORD")
+
+if not app_password:
+    st.error("The app password is not configured.")
+    st.stop()
+
+if not st.session_state.authenticated:
+    st.title("Research Assistant")
+    with st.form("login_form"):
+        entered_password = st.text_input("Password", type="password")
+        submitted = st.form_submit_button("Sign in")
+
+    if submitted:
+        if hmac.compare_digest(entered_password, app_password):
+            st.session_state.authenticated = True
+            st.rerun()
+        else:
+            st.error("Incorrect password.")
+    st.stop()
+
+from src.agents.agents import build_search_agent, build_reader_agent, writer_chain, critic_chain
 
 # ── Custom CSS ────────────────────────────────────────────────────────────────
 st.markdown("""
