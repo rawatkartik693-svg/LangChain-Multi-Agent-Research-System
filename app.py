@@ -1,5 +1,6 @@
 import streamlit as st
 import time
+import html
 import hmac
 import os
 
@@ -117,11 +118,14 @@ html, body, [class*="css"] {
 }
 
 /* ── Streamlit input overrides ── */
+.stTextInput input,
 .stTextInput > div > div > input {
     background: rgba(255,255,255,0.06) !important;
     border: 1px solid rgba(56,189,248,0.25) !important;
     border-radius: 12px !important;
     color: #f8fbff !important;
+    -webkit-text-fill-color: #f8fbff !important;
+    caret-color: #38bdf8 !important;
     font-family: 'DM Sans', sans-serif !important;
     font-size: 1rem !important;
     padding: 0.8rem 1rem !important;
@@ -256,7 +260,22 @@ html, body, [class*="css"] {
     line-height: 1.8;
     color: #d8e2f0;
     white-space: pre-wrap;
+    overflow-wrap: anywhere;
     font-family: 'DM Sans', sans-serif;
+}
+.result-content,
+.result-content * {
+    color: #f1f5f9 !important;
+    opacity: 1 !important;
+}
+.stMarkdown,
+.stMarkdown p,
+.stMarkdown li,
+.stMarkdown h1,
+.stMarkdown h2,
+.stMarkdown h3,
+.stMarkdown h4 {
+    color: #f1f5f9;
 }
 
 /* ── Report & feedback panels ── */
@@ -590,7 +609,7 @@ if r:
                     </div>
 
                     <div class="result-content">
-                        {r["search"]}
+                        {html.escape(r["search"])}
                     </div>
                 </div>
                 ''',
@@ -608,7 +627,7 @@ if r:
                     </div>
 
                     <div class="result-content">
-                        {r["reader"]}
+                        {html.escape(r["reader"])}
                     </div>
                 </div>
                 ''',
